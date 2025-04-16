@@ -7,21 +7,34 @@ if (!isset($_SESSION['tasks'][$index])) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama = $_POST['nama'] ?? '';
+    $waktu = $_POST['waktu'] ?? '';
+
+    if ($nama && $waktu) {
+        $_SESSION['tasks'][$index] = ['nama' => $nama, 'waktu' => $waktu];
+        header("Location: detail.php?index=$index");
+        exit();
+    }
+}
+
 $tugas = $_SESSION['tasks'][$index];
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Detail Tugas</title>
+    <title>Edit Tugas</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
-    <h2>Detail Tugas</h2>
-    <p><strong>Nama:</strong> <?= htmlspecialchars($tugas['nama']) ?></p>
-    <p><strong>Waktu:</strong> <?= htmlspecialchars($tugas['waktu']) ?> jam</p>
-    <a href="index.php">← Kembali ke daftar</a>
+    <h2>Edit Tugas</h2>
+    <form method="post">
+        <input type="text" name="nama" value="<?= htmlspecialchars($tugas['nama']) ?>" required>
+        <input type="number" name="waktu" value="<?= htmlspecialchars($tugas['waktu']) ?>" required>
+        <button type="submit">Simpan Perubahan</button>
+    </form>
 </div>
 </body>
 </html>

@@ -1,12 +1,14 @@
 <?php
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nama = $_POST['nama'];
-    $waktu = $_POST['waktu'];
+    $nama = $_POST['nama'] ?? '';
+    $waktu = $_POST['waktu'] ?? '';
 
-    $_SESSION['tasks'][] = ['nama' => $nama, 'waktu' => $waktu];
-    header('Location: index.php');
-    exit();
+    if ($nama && $waktu) {
+        $_SESSION['tasks'][] = ['nama' => $nama, 'waktu' => $waktu];
+        header('Location: index.php');
+        exit();
+    }
 }
 ?>
 
@@ -21,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h2>Tambah Tugas</h2>
     <form method="post">
         <input type="text" name="nama" placeholder="Nama Tugas" required>
-        <input type="number" name="waktu" placeholder="Waktu (jam)" required>
+        <input type="number" name="waktu" placeholder="Waktu (jam)" min="1" required>
         <button type="submit">Simpan</button>
     </form>
 </div>
